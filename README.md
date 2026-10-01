@@ -39,9 +39,11 @@ Open <http://127.0.0.1:8000>. The API health endpoint is <http://127.0.0.1:8000/
 
 The self-test uses generated records only to check that the code runs. It is not a real-world accuracy test. Without a trained model, the backend reports `training_data_required`; the crop form then uses the clearly labeled local demo ranker.
 
+The repository includes a public ICRISAT historical climate/yield workbook in `backend/data/`. Its source, CC BY 4.0 attribution, schema, and limitations are documented in [`backend/data/README.md`](backend/data/README.md). This raw workbook is not automatically loaded or treated as a complete training dataset.
+
 ## Train With Farm Records
 
-The model needs observed, labeled farm outcomes. Do not use the browser's illustrative crop benchmarks as training labels. Prepare a CSV with at least 30 rows, at least 3 crop types, and at least 5 observations per crop. Each row should represent a real farm outcome with units recorded consistently.
+The full crop and profitability model needs observed, labeled farm outcomes. Do not use the browser's illustrative crop benchmarks as training labels. The included ICRISAT data contains historical district-level climate and yields but has no measured soil nutrients, current prices, or cultivation costs. It cannot be fed directly to the full model or validate profit predictions. Prepare a CSV with at least 30 rows, at least 3 crop types, and at least 5 observations per crop. Each row should represent a real farm outcome with units recorded consistently.
 
 Required CSV headers:
 
@@ -63,7 +65,7 @@ Cross-validation scores apply only to the supplied dataset and do not guarantee 
 
 ## Publish With GitHub And Render
 
-The supplied GitHub repository is `iman2004-explorer/krishi-bandhu`. This workspace is initialized on `main` with that repository configured as `origin`. The remote currently contains only its initial README commit. Do not upload farm CSV files, `.pkl`/`.joblib` model files, credentials, or the `.venv` folder; `.gitignore` excludes these local/private files.
+The GitHub repository is `iman2004-explorer/krishi-bandhu`; the app and deployment configuration are published on `main`. This workspace is initialized with that repository configured as `origin`. Do not upload private farm CSV files, `.pkl`/`.joblib` model artifacts, credentials, or the `.venv` folder; `.gitignore` excludes these local/private files. The attributed public workbook under `backend/data/` is intentionally included.
 
 Before committing, configure a Git author for this repository. Use your preferred name and GitHub email (a GitHub noreply email is fine):
 
@@ -83,6 +85,6 @@ In Render, choose **New + → Blueprint**, connect `iman2004-explorer/krishi-ban
 
 ### Model Artifact Requirement
 
-The repository intentionally does not contain a trained model or farm records. A deployment without `backend/farm_model.pkl` serves the site and uses the labeled browser demo for crop comparisons/recommendations; the Python recommendation endpoint reports that training data is required. The `--self-test` model uses synthetic data and is not a real accuracy test.
+The repository contains one public district-level climate/yield dataset, but it does not contain a complete farm-level training dataset or a trained model. A deployment without `backend/farm_model.pkl` serves the site and uses the labeled browser demo for crop comparisons/recommendations; the Python recommendation endpoint reports that training data is required. The `--self-test` model uses synthetic data and is not a real accuracy test.
 
 For real model recommendations, train from verified farm observations, then provide the resulting trusted model artifact to the deployed service using a storage location that survives redeploys and set Render's `FARM_MODEL_PATH` environment variable to that file. Render's free filesystem is ephemeral, so a free instance cannot reliably keep a model artifact uploaded at runtime. Do not train on or publish fabricated benchmark records.
