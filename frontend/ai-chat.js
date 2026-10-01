@@ -1,14 +1,29 @@
+import { retrieveFarmKnowledge } from "./farm-knowledge.js";
+
 const MODEL_ID = "Xenova/Qwen1.5-0.5B-Chat";
 const TRANSFORMERS_URL = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2";
 
 export function initializeAiChat({ getFarmContext, money }) {
   const chatForm = document.getElementById("chatForm");
   const chatInput = document.getElementById("chatInput");
+  const chatTopic = document.getElementById("chatTopic");
   const chatMessages = document.getElementById("chatMessages");
   const chatStatus = document.getElementById("chatStatus");
   const chatSend = document.getElementById("chatSend");
   const chatHistory = [];
   let textGeneratorPromise;
+  const topicNames = {
+    general: "General farming",
+    "field-crops": "Field crops",
+    fruits: "Fruits",
+    flowers: "Flowers",
+    spices: "Spices"
+  };
+
+  chatTopic.addEventListener("change", () => {
+    chatHistory.length = 0;
+    chatStatus.textContent = `Topic set to ${topicNames[chatTopic.value]}. Ask a question to get tailored guidance.`;
+  });
 
   function loadTextGenerator() {
     if (!textGeneratorPromise) {
@@ -55,11 +70,19 @@ export function initializeAiChat({ getFarmContext, money }) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
     const farm = getFarmContext();
-    const context = `Farm context: location ${farm.location}; season ${farm.season}; soil ${farm.soil}; land ${farm.land} acres; selected crop ${farm.cropName}; estimated yield ${farm.crop.yieldPerAcre} quintals per acre; crop water need ${farm.crop.water}; current weather ${farm.temperature}, humidity ${farm.humidity}; estimated investment ${farm.investment}; estimated expenses ${farm.expenses}; estimated revenue ${farm.revenue}; estimated net profit ${farm.profit}. These are rough app estimates, not verified market quotes.`;
+    const cropContext = farm.crop
+      ? `estimated yield ${farm.crop.yieldPerAcre} quintals per acre; crop water need ${farm.crop.water}`
+      : "no verified yield or crop-specific water estimate is available for this fruit, flower, or spice";
+    const context = `Farm context: location ${farm.location}; season ${farm.season}; soil ${farm.soil}; land ${farm.land} acres; selected plant ${farm.cropName}; ${cropContext}; current weather ${farm.temperature}, humidity ${farm.humidity}; estimated investment ${farm.investment}; estimated expenses ${farm.expenses}; estimated revenue ${farm.revenue}; estimated net profit ${farm.profit}. These are rough app estimates, not verified market quotes.`;
+    const topic = chatTopic.value;
+    const knowledge = retrieveFarmKnowledge({ topic, question: text, farm });
+    const retrievedNotes = knowledge
+      .map((note, index) => `${index + 1}. ${note.title}: ${note.guidance}`)
+      .join("\n");
     const messages = [
       {
         role: "system",
-        content: `You are Krishi Bandhu, a concise and cautious agriculture assistant for Indian farmers. Answer the user's actual question in plain language and use the farm context when relevant. Do not invent live facts, prices, yields, or precise agronomy measurements. Never calculate financial figures; use only the exact app estimates that will be shown separately. For pesticide, fertilizer dosage, disease diagnosis, or high-stakes decisions, give general safety guidance and recommend confirming locally with a KVK or agricultural extension officer. Farm context: ${context}`
+        content: `You are Krishi Bandhu, a practical agriculture assistant for Indian farmers. The selected topic is ${topicNames[topic]}. Answer the user's actual question, using the retrieved notes first and the farm context when relevant. Give useful details about suitable season, soil, planting, irrigation, care, monitoring, harvest, and post-harvest only as relevant. Retrieved notes are general guidance, not a guarantee for every variety or district. If the notes do not cover a crop or fact, say so and ask for the variety or district, or clearly label general knowledge. Do not invent exact fertilizer or pesticide doses, diagnoses, current prices, yields, or live facts. Never calculate financial figures; use only the app's exact estimates shown separately. For chemical use or serious disease, direct the farmer to the product label and local KVK/agricultural extension officer. Farm context: ${context}\nRetrieved agriculture notes:\n${retrievedNotes}`
       },
       ...chatHistory.slice(-6),
       { role: "user", content: text }
@@ -83,7 +106,7 @@ export function initializeAiChat({ getFarmContext, money }) {
       const estimates = financialQuestion
         ? `\n\nApp estimates for ${farm.cropName} (${farm.land} acres): investment ${farm.investment}, expenses ${farm.expenses}, gross revenue ${farm.revenue}, net profit ${farm.profit}. These are rough estimates, not verified market quotes.`
         : "";
-      botMessage.textContent = `${answer.trim()}${estimates}\n\nPlease verify important crop and treatment decisions with your local KVK or agricultural extension officer.`;
+      botMessage.textContent = `${answer.trim()}${estimates}\n\nTopic: ${topicNames[topic]}. Verify local varieties, treatment advice, and current prices with your KVK or agricultural extension officer.`;
       chatHistory.push({ role: "user", content: text }, { role: "assistant", content: answer.trim() });
       chatStatus.textContent = "AI ready · running privately in your browser · no API key";
     } catch (error) {

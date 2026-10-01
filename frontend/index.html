@@ -182,6 +182,8 @@ button{cursor:pointer}
 [data-theme="dark"] .bot{color:#e2ece5;}
 .user{align-self:flex-end;background:var(--green-800);color:white;border-bottom-right-radius:5px}
 .chat-input{display:flex;gap:8px;border-top:1px solid var(--line);padding-top:13px}
+.chat-input select{flex:0 0 130px;border:1px solid var(--card-border);border-radius:13px;padding:12px 10px;outline:none;background:var(--chat-input-bg);color:var(--text-color)}
+.chat-input select:focus{border-color:var(--green-500)}
 .chat-input input{flex:1;border:1px solid var(--card-border);border-radius:13px;padding:12px 13px;outline:none;background:var(--chat-input-bg);color:var(--text-color)}
 .chat-input input:focus{border-color:var(--green-500)}
 .send{border:0;background:var(--green-800);color:white;border-radius:13px;padding:0 17px;font-weight:800}
@@ -255,6 +257,11 @@ button{cursor:pointer}
   .hero-grid,.query-wrap,.crop-grid,.profit-grid{grid-template-columns:1fr}
   .forecast{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
+@media(max-width:550px){
+  .chat-input{flex-wrap:wrap}
+  .chat-input select{flex-basis:100%}
+  .chat-input input{min-width:0}
+}
 </style>
 </head>
 <body>
@@ -319,27 +326,36 @@ button{cursor:pointer}
         <div class="section-kicker">On-Device AI Assistant</div>
         <h2>Talk to Krishi Bandhu AI.</h2>
       </div>
-      <p class="section-intro">Type queries naturally. The AI model cross-references your current location, soil parameters, and budget in real time.</p>
+      <p class="section-intro">Ask about field crops, fruits, flowers, spices, farm care, or costs. Choose a topic for more relevant guidance.</p>
     </div>
 
     <div class="query-wrap">
       <div class="info-panel">
         <h3>AI Farm Assistant</h3>
-        <p>Ask about crop suitability, pest management, expected yields, weather conditions, or investment breakdowns.</p>
+        <p>Get guidance on planting, irrigation, crop care, pest monitoring, harvest, and farm economics.</p>
         <div class="tip-list">
-          <div class="tip"><div class="tip-icon">🌾</div><span>“What crop should I plant in my current soil?”</span></div>
+          <div class="tip"><div class="tip-icon">🌾</div><span>“How do I plan paddy for my soil and season?”</span></div>
           <div class="tip"><div class="tip-icon">💰</div><span>“Show me my expense breakdown and profits”</span></div>
-          <div class="tip"><div class="tip-icon">🌦️</div><span>“How is the weather affecting my irrigation?”</span></div>
+          <div class="tip"><div class="tip-icon">🍋</div><span>“How should I manage mango fruit fly?”</span></div>
+          <div class="tip"><div class="tip-icon">🌺</div><span>“How do I grow marigold flowers?”</span></div>
+          <div class="tip"><div class="tip-icon">🫚</div><span>“What causes ginger rhizome rot?”</span></div>
         </div>
       </div>
 
       <div class="chat-panel">
         <p class="chat-status" id="chatStatus" role="status" aria-live="polite">Free AI model loads on your first message. No API key required.</p>
         <div class="chat-messages" id="chatMessages">
-          <div class="message bot">Namaste! 🌱 Ask me about your crops, farm conditions, or budget. The AI runs in your browser; its first load needs an internet connection.</div>
+          <div class="message bot">Namaste! 🌱 Choose a farming topic, then ask about field crops, fruit orchards, flowers, spices, care, or costs. The first AI reply downloads the model in your browser.</div>
         </div>
         <form class="chat-input" id="chatForm">
-          <input id="chatInput" placeholder="Type text query e.g., 'What are my estimated profits and expenses?'..." autocomplete="off">
+          <select id="chatTopic" aria-label="Farming topic">
+            <option value="general">General</option>
+            <option value="field-crops">Field crops</option>
+            <option value="fruits">Fruits</option>
+            <option value="flowers">Flowers</option>
+            <option value="spices">Spices</option>
+          </select>
+          <input id="chatInput" placeholder="Ask about planting, care, pests, harvest, or costs..." autocomplete="off" maxlength="500">
           <button class="send" id="chatSend" type="submit">Send</button>
         </form>
       </div>
@@ -359,6 +375,15 @@ button{cursor:pointer}
 
     <div class="crop-grid">
       <form class="crop-form" id="cropForm">
+        <div class="field">
+          <label for="cropCategory">FARMING CATEGORY</label>
+          <select id="cropCategory">
+            <option value="field-crops">Field crops</option>
+            <option value="fruits">Fruits</option>
+            <option value="flowers">Flowers</option>
+            <option value="spices">Spices</option>
+          </select>
+        </div>
         <div class="field">
           <label for="locationInput">FARM LOCATION (City / District)</label>
           <input id="locationInput" value="Durgapur" placeholder="e.g. Durgapur, Bankura, Patna">
@@ -705,13 +730,20 @@ function updateProfit() {
   document.getElementById("totalCost").textContent = money(totalExpense);
 
   const acres = Math.max(0.1, Number(document.getElementById("land").value) || 2);
+  document.getElementById("selectedCrop").textContent = `${activeCropName} · ${acres} acres`;
+
+  if (!activeCropData) {
+    document.getElementById("marketPrice").textContent = "Not available";
+    document.getElementById("revenue").textContent = "Not available";
+    document.getElementById("profitValue").textContent = "Not available";
+    return;
+  }
+
   const grossRevenue = acres * activeCropData.yieldPerAcre * activeCropData.price;
   const netProfit = grossRevenue - totalExpense;
-
   document.getElementById("marketPrice").textContent = `₹${activeCropData.price.toLocaleString("en-IN")} / q`;
   document.getElementById("revenue").textContent = money(grossRevenue);
   document.getElementById("profitValue").textContent = money(netProfit);
-  document.getElementById("selectedCrop").textContent = `${activeCropName} · ${acres} acres`;
 }
 
 document.getElementById("investment").addEventListener("input", updateProfit);
@@ -813,9 +845,9 @@ function displayCropRecommendation(cropName, cropData, reason, status) {
   activeCropName = cropName;
   activeCropData = cropData;
   document.getElementById("cropName").textContent = cropName;
-  document.getElementById("yield").textContent = `${cropData.yieldPerAcre.toFixed(1)} q / acre`;
-  document.getElementById("period").textContent = cropData.period;
-  document.getElementById("water").textContent = cropData.water;
+  document.getElementById("yield").textContent = cropData ? `${cropData.yieldPerAcre.toFixed(1)} q / acre` : "No verified data";
+  document.getElementById("period").textContent = cropData?.period || "Variety-dependent";
+  document.getElementById("water").textContent = cropData?.water || "Check local guidance";
   document.getElementById("cropReason").textContent = reason;
   document.getElementById("modelStatusBadge").textContent = status;
   updateProfit();
@@ -841,12 +873,34 @@ document.getElementById("cropForm").addEventListener("submit", async e => {
   e.preventDefault();
   const season = document.getElementById("season").value;
   const soil = document.getElementById("soil").value;
+  const category = document.getElementById("cropCategory").value;
   const location = document.getElementById("locationInput").value.trim() || "Durgapur";
   const submitButton = e.submitter || document.querySelector('#cropForm button[type="submit"]');
   submitButton.disabled = true;
 
   try {
     await fetchLiveWeather(location);
+    if (category !== "field-crops") {
+      const { retrieveFarmKnowledge } = await import("./farm-knowledge.js");
+      const suggestions = retrieveFarmKnowledge({
+        topic: category,
+        question: `${category} suggestions for ${season} ${soil} soil in ${location}`,
+        farm: { season, soil, location }
+      });
+      if (!suggestions.length) throw new Error(`No ${category} guidance is available.`);
+
+      const [top, ...alternatives] = suggestions;
+      const cropName = top.title.split(" ")[0];
+      const options = [top, ...alternatives].map(item => item.title.split(" ")[0]);
+      displayCropRecommendation(
+        cropName,
+        null,
+        `Knowledge-guide starting options for ${location} (${season}, ${soil}): ${options.join(", ")}. ${top.guidance} The current model has no verified yield, market-price, or cost data for ${category}; confirm local suitability and economics with your KVK.`,
+        `${category.toUpperCase()} GUIDE · VERIFY LOCALLY`
+      );
+      return;
+    }
+
     const payload = {
       season,
       soil_type: soil,
