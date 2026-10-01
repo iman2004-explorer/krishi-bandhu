@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krishi Bandhu — Smart AI Farming Assistant</title>
+<style>
+:root{
+  --green-950:#0b2418;
+  --green-900:#103b25;
+  --green-800:#155b35;
+  --green-700:#1d7042;
+  --green-500:#42a85f;
+  --green-100:#e8f5ea;
+  --cream:#f7f5ed;
+  --white:#ffffff;
+  --ink:#17231b;
+  --muted:#6b756e;
+  --line:#e3e8e2;
+  --yellow:#f4c95d;
+  --shadow:0 18px 50px rgba(15,53,31,.10);
+  --radius:24px;
+  
+  --bg-color: var(--cream);
+  --text-color: var(--ink);
+  --card-bg: var(--white);
+  --card-border: var(--line);
+  --nav-bg: rgba(247,245,237,.9);
+  --crop-section-bg: #eef4ec;
+  --metric-bg: #f7f9f5;
+  --metric-border: #e8eee6;
+  --metric-tag-bg: #f1f2ed;
+  --metric-tag-text: #58635a;
+  --expense-total-bg: #f8faf7;
+  --summary-bg: #f7f8f4;
+  --chat-input-bg: #ffffff;
+}
+
+[data-theme="dark"] {
+  --bg-color: #0c1811;
+  --text-color: #e2ece5;
+  --card-bg: #13271d;
+  --card-border: #1f3b2d;
+  --nav-bg: rgba(12, 24, 17, 0.9);
+  --green-100: #193826;
+  --crop-section-bg: #0f2017;
+  --metric-bg: #183325;
+  --metric-border: #224733;
+  --metric-tag-bg: #1c3b2a;
+  --metric-tag-text: #a4c2b0;
+  --expense-total-bg: #173324;
+  --summary-bg: #183325;
+  --chat-input-bg: #162f22;
+  --line: #224231;
+  --muted: #9aa8a0;
+  --cream: #0c1811;
+  --white: #13271d;
+  --ink: #e2ece5;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg-color); color:var(--text-color); line-height:1.5;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.container{width:min(1160px,92%);margin:auto}
+
+/* NAV */
+.navbar{
+  position:sticky;top:0;z-index:50;
+  background:var(--nav-bg);backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(20,59,37,.08);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.nav-inner{height:76px;display:flex;align-items:center;justify-content:space-between;position:relative}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--text-color);font-weight:800;font-size:1.15rem}
+.brand-mark{
+  width:38px;height:38px;border-radius:12px;background:var(--green-800);
+  display:grid;place-items:center;color:white;font-size:20px;
+}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.92rem;font-weight:600}
+.nav-links a:hover{color:var(--green-500)}
+.nav-cta{background:var(--green-800)!important;color:white!important;padding:11px 17px;border-radius:12px}
+
+.theme-toggle {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-color);
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  transition: .2s;
+}
+.theme-toggle:hover {
+  transform: translateY(-2px);
+  border-color: var(--green-500);
+}
+
+.menu{display:none;background:var(--card-bg);border:1px solid var(--card-border);font-size:21px;color:var(--text-color);width:38px;height:38px;border-radius:12px;place-items:center}
+.menu:hover{border-color:var(--green-500)}
+
+/* HERO */
+.hero{padding:72px 0 48px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:55px;align-items:center}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;background:var(--green-100);
+  color:var(--green-800);padding:8px 13px;border-radius:999px;font-size:.8rem;font-weight:800;
+  margin-bottom:18px;
+}
+[data-theme="dark"] .eyebrow { color: var(--green-500); }
+.eyebrow-dot{width:7px;height:7px;background:var(--green-500);border-radius:50%}
+.hero h1{font-size:clamp(2.8rem,6vw,5.2rem);line-height:.98;letter-spacing:-.055em;color:var(--text-color);max-width:720px}
+.hero h1 span{color:var(--green-700)}
+[data-theme="dark"] .hero h1 span{color:var(--green-500)}
+.hero-copy{font-size:1.08rem;color:var(--muted);max-width:590px;margin:25px 0 30px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.primary,.secondary{
+  border:0;padding:14px 20px;border-radius:14px;font-weight:800;transition:.2s;
+}
+.primary{background:var(--green-800);color:white;box-shadow:0 9px 24px rgba(21,91,53,.2)}
+.secondary{background:var(--card-bg);color:var(--text-color);border:1px solid var(--card-border)}
+.primary:hover,.secondary:hover{transform:translateY(-2px)}
+
+/* WEATHER CARD */
+.weather-card{
+  background:linear-gradient(145deg,var(--green-900),#1a6040);
+  border-radius:32px;padding:26px;color:white;box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+.weather-card:after{
+  content:"";position:absolute;width:210px;height:210px;border-radius:50%;
+  background:rgba(255,255,255,.07);right:-70px;top:-75px;
+}
+.card-top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
+.location{font-size:.8rem;opacity:.72}.location strong{display:block;color:white;font-size:1rem;opacity:1;margin-top:2px}
+.live{font-size:.7rem;background:rgba(255,255,255,.12);padding:7px 9px;border-radius:99px}
+.weather-main{display:flex;justify-content:space-between;align-items:center;margin:38px 0 30px;position:relative;z-index:2}
+.temperature{font-size:4.3rem;font-weight:800;letter-spacing:-.06em;line-height:1}
+.condition{opacity:.8;margin-top:8px}
+.sun{font-size:70px}
+.weather-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;position:relative;z-index:2}
+.weather-stat{background:rgba(255,255,255,.1);border-radius:15px;padding:12px}
+.weather-stat small{opacity:.65;font-size:.68rem}.weather-stat strong{display:block;margin-top:3px}
+.forecast{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:10px}
+.forecast div{text-align:center;background:rgba(255,255,255,.07);padding:10px 4px;border-radius:12px;font-size:.72rem;position:relative;z-index:2;min-width:0}
+.forecast-icon{display:block;font-size:1.15rem;margin:3px 0}
+.forecast b{display:block;margin-top:3px}.forecast small{display:block;opacity:.7;font-size:.65rem}
+
+/* SECTION */
+.section{padding:88px 0}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:34px}
+.section-kicker{text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;font-weight:900;color:var(--green-700);margin-bottom:9px}
+[data-theme="dark"] .section-kicker{color:var(--green-500)}
+.section h2{font-size:clamp(2rem,4vw,3rem);line-height:1.05;letter-spacing:-.04em;color:var(--text-color)}
+.section-intro{max-width:520px;color:var(--muted);font-size:.95rem}
+
+/* QUERY */
+.query-wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:20px}
+.info-panel,.chat-panel,.crop-form,.crop-result,.profit-card{
+  background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);box-shadow:0 10px 35px rgba(22,48,30,.05);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.info-panel{padding:28px;background:var(--green-950);color:white;border-color:transparent}
+.info-panel h3{font-size:1.55rem;line-height:1.15;margin-bottom:14px}
+.info-panel p{color:rgba(255,255,255,.67);font-size:.9rem}
+.tip-list{margin-top:28px;display:grid;gap:14px}
+.tip{display:flex;gap:12px;align-items:flex-start}
+.tip-icon{width:31px;height:31px;border-radius:10px;background:rgba(255,255,255,.1);display:grid;place-items:center}
+.tip span{font-size:.78rem;color:rgba(255,255,255,.68)}
+.chat-panel{padding:18px}
+.chat-status{min-height:20px;margin:0 8px 7px;color:var(--muted);font-size:.75rem}
+.chat-messages{height:280px;overflow:auto;padding:7px 8px;display:flex;flex-direction:column;gap:11px}
+.message{max-width:85%;padding:11px 14px;border-radius:16px;font-size:.88rem;line-height:1.4}
+.bot{background:var(--green-100);color:var(--text-color);border-bottom-left-radius:5px}
+[data-theme="dark"] .bot{color:#e2ece5;}
+.user{align-self:flex-end;background:var(--green-800);color:white;border-bottom-right-radius:5px}
+.chat-input{display:flex;gap:8px;border-top:1px solid var(--line);padding-top:13px}
+.chat-input input{flex:1;border:1px solid var(--card-border);border-radius:13px;padding:12px 13px;outline:none;background:var(--chat-input-bg);color:var(--text-color)}
+.chat-input input:focus{border-color:var(--green-500)}
+.send{border:0;background:var(--green-800);color:white;border-radius:13px;padding:0 17px;font-weight:800}
+
+/* CROP */
+.crop-section{background:var(--crop-section-bg); transition: background 0.3s ease;}
+.crop-grid{display:grid;grid-template-columns:.75fr 1.25fr;gap:20px}
+.crop-form{padding:27px}
+.field{margin-bottom:16px}.field label{display:block;font-size:.78rem;font-weight:800;color:var(--text-color);opacity:0.9;margin-bottom:7px}
+.field input,.field select{width:100%;padding:13px;border:1px solid var(--card-border);border-radius:12px;background:var(--chat-input-bg);color:var(--text-color);outline:none}
+.field input:focus,.field select:focus{border-color:var(--green-500)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.crop-result{padding:27px;position:relative;overflow:hidden}
+.recommend-badge{display:inline-block;background:var(--green-100);color:var(--green-800);padding:7px 10px;border-radius:99px;font-size:.68rem;font-weight:900}
+[data-theme="dark"] .recommend-badge { color: var(--green-500); }
+.crop-name{font-size:2.7rem;color:var(--text-color);letter-spacing:-.04em;margin-top:12px}
+.crop-reason{color:var(--muted);font-size:.88rem;max-width:600px;margin:7px 0 23px}
+.crop-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.metric{background:var(--metric-bg);border:1px solid var(--metric-border);border-radius:15px;padding:14px}
+.metric small{display:block;color:var(--muted);font-size:.67rem}.metric strong{display:block;margin-top:4px;color:var(--text-color)}
+
+/* PROFIT */
+.profit-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:20px}
+.profit-card{padding:27px}
+.investment{
+  background:var(--green-950);color:white;border-radius:20px;padding:24px;
+  display:flex;flex-direction:column;justify-content:space-between;min-height:330px
+}
+.investment h3{font-size:1.5rem}
+.investment p{font-size:.8rem;color:rgba(255,255,255,.62);margin-top:7px}
+.money-input{margin-top:30px}
+.money-input label{font-size:.72rem;color:rgba(255,255,255,.7);display:block;margin-bottom:7px}
+.money-input input{width:100%;padding:14px;border-radius:13px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:white;font-size:1.3rem;outline:none}
+.result-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.result-header h3{font-size:1.35rem;color:var(--text-color)}
+.crop-pill{font-size:.7rem;background:var(--green-100);color:var(--green-800);padding:7px 10px;border-radius:99px;font-weight:800}
+[data-theme="dark"] .crop-pill { color: var(--green-500); }
+.expenses{display:grid;gap:0;border:1px solid var(--card-border);border-radius:16px;overflow:hidden}
+.expense-row{display:flex;justify-content:space-between;padding:13px 15px;font-size:.82rem;border-bottom:1px solid var(--card-border)}
+.expense-row:last-child{border-bottom:0}
+.expense-row span:first-child{color:var(--muted)}
+.expense-row.total{background:var(--expense-total-bg);font-weight:800;color:var(--text-color)}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:13px}
+.summary{padding:15px;border-radius:15px;background:var(--summary-bg);border: 1px solid var(--card-border)}
+.summary small{display:block;color:var(--muted);font-size:.67rem}.summary strong{display:block;font-size:1.2rem;margin-top:3px;color:var(--text-color)}
+.summary.highlight{background:var(--green-800);color:white;border-color: transparent;}.summary.highlight small,.summary.highlight strong{color:white}
+
+/* CROP COMPARISON */
+.compare-selectors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:20px}
+.comparison-table-wrap{overflow-x:auto;background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px}
+.comparison-table{width:100%;min-width:680px;border-collapse:collapse;text-align:left}
+.comparison-table th,.comparison-table td{padding:14px 16px;border-bottom:1px solid var(--card-border);font-size:.86rem}
+.comparison-table thead th{background:var(--summary-bg);color:var(--text-color);font-size:.78rem}
+.comparison-table tbody th{width:27%;color:var(--muted);font-weight:700}
+.comparison-table tr:last-child th,.comparison-table tr:last-child td{border-bottom:0}
+.comparison-table .profit-row td{color:var(--green-700);font-weight:800}
+[data-theme="dark"] .comparison-table .profit-row td{color:var(--green-500)}
+.comparison-note{color:var(--muted);font-size:.8rem;margin-top:12px}
+
+/* FOOTER */
+.footer{background:var(--green-950);color:white;padding:42px 0}
+.footer-inner{display:flex;justify-content:space-between;gap:25px;align-items:center}
+.footer p{color:rgba(255,255,255,.55);font-size:.8rem}
+.footer strong{font-size:1.05rem}
+
+@media(max-width:850px){
+  .nav-links{display:none}
+  .nav-links.is-open{display:flex;position:absolute;top:68px;left:0;right:0;z-index:60;flex-direction:column;align-items:stretch;gap:0;padding:8px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;box-shadow:var(--shadow)}
+  .nav-links.is-open a{padding:13px 14px;border-radius:9px}
+  .menu{display:grid}
+  .hero-grid,.query-wrap,.crop-grid,.profit-grid{grid-template-columns:1fr}
+  .forecast{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container nav-inner">
+    <a href="#" class="brand"><span class="brand-mark">🌱</span> Krishi Bandhu</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#weather">Weather AI</a>
+      <a href="#assistant">AI Chat Model</a>
+      <a href="#crops">Smart Crop Engine</a>
+      <a href="#compare">Compare Crops</a>
+      <a href="#profit" class="nav-cta">Profit & Cost Calculator</a>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+      <button class="menu" id="menuToggle" type="button" aria-label="Open navigation menu" aria-controls="navLinks" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="weather">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> Free Open-Meteo & On-Device AI</div>
+      <h1>AI-Powered Farm Intelligence.<br><span>Real-time Insights.</span></h1>
+      <p class="hero-copy">Type your location or query below. Our free open-source stack pulls live weather conditions, analyzes soil compatibility, and computes profit margins instantly.</p>
+      <div class="hero-actions">
+        <a href="#crops"><button class="primary">Run Crop Engine →</button></a>
+        <a href="#assistant"><button class="secondary">Ask AI Bandhu</button></a>
+      </div>
+    </div>
+
+    <div class="weather-card">
+      <div class="card-top">
+        <div class="location">LOCATION WEATHER<strong id="weatherLocLabel">📍 Durgapur, West Bengal</strong></div>
+        <div class="live" id="weatherStatus">● Live API Connected</div>
+      </div>
+      <div class="weather-main">
+        <div>
+          <div class="temperature" id="tempVal">29°C</div>
+          <div class="condition" id="conditionVal">Fetching live atmospheric data...</div>
+        </div>
+        <div class="sun" id="weatherIcon">⛅</div>
+      </div>
+      <div class="weather-stats">
+        <div class="weather-stat"><small>Humidity</small><strong id="humidityVal">71%</strong></div>
+        <div class="weather-stat"><small>Wind Speed</small><strong id="windVal">12 km/h</strong></div>
+        <div class="weather-stat"><small>Soil Condition</small><strong id="soilStatVal">Optimal</strong></div>
+      </div>
+      <div class="forecast" id="forecastContainer" aria-label="Five day weather forecast" aria-live="polite">
+        <div>Loading forecast...</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="assistant">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-kicker">On-Device AI Assistant</div>
+        <h2>Talk to Krishi Bandhu AI.</h2>
+      </div>
+      <p class="section-intro">Type queries naturally. The AI model cross-references your current location, soil parameters, and budget in real time.</p>
+    </div>
+
+    <div class="query-wrap">
+      <div class="info-panel">
+        <h3>AI Farm Assistant</h3>
+        <p>Ask about crop suitability, pest management, expected yields, weather conditions, or investment breakdowns.</p>
+        <div class="tip-list">
+          <div class="tip"><div class="tip-icon">🌾</div><span>“What crop should I plant in my current soil?”</span></div>
+          <div class="tip"><div class="tip-icon">💰</div><span>“Show me my expense breakdown and profits”</span></div>
+          <div class="tip"><div class="tip-icon">🌦️</div><span>“How is the weather affecting my irrigation?”</span></div>
+        </div>
+      </div>
+
+      <div class="chat-panel">
+        <p class="chat-status" id="chatStatus" role="status" aria-live="polite">Free AI model loads on your first message. No API key required.</p>
+        <div class="chat-messages" id="chatMessages">
+          <div class="message bot">Namaste! 🌱 Ask me about your crops, farm conditions, or budget. The AI runs in your browser; its first load needs an internet connection.</div>
+        </div>
+        <form class="chat-input" id="chatForm">
+          <input id="chatInput" placeholder="Type text query e.g., 'What are my estimated profits and expenses?'..." autocomplete="off">
+          <button class="send" id="chatSend" type="submit">Send</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section crop-section" id="crops">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-kicker">Automated Recommendation Engine</div>
+        <h2>Model-Driven Crop Matcher.</h2>
+      </div>
+      <p class="section-intro">Input your region, seasonal window, and land size to pull free open geospatial weather metrics.</p>
+    </div>
+
+    <div class="crop-grid">
+      <form class="crop-form" id="cropForm">
+        <div class="field">
+          <label for="locationInput">FARM LOCATION (City / District)</label>
+          <input id="locationInput" value="Durgapur" placeholder="e.g. Durgapur, Bankura, Patna">
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="season">SEASON</label>
+            <select id="season">
+              <option value="Kharif">Kharif (Monsoon)</option>
+              <option value="Rabi">Rabi (Winter)</option>
+              <option value="Zaid">Zaid (Summer)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="land">LAND (Acres)</label>
+            <input id="land" type="number" value="2" min="0.1" step="0.1">
+          </div>
+        </div>
+        <div class="field">
+          <label for="soil">SOIL TYPE</label>
+          <select id="soil">
+            <option value="Alluvial">Alluvial Soil</option>
+            <option value="Loamy">Loamy Soil</option>
+            <option value="Clay">Clay Soil</option>
+            <option value="Sandy">Sandy Soil</option>
+            <option value="Black soil">Black Soil</option>
+          </select>
+        </div>
+        <button class="primary" type="submit" style="width:100%">Process & Suggest Crop →</button>
+      </form>
+
+      <div class="crop-result">
+        <span class="recommend-badge" id="modelStatusBadge">CHECKING PYTHON BACKEND...</span>
+        <div class="crop-name" id="cropName">Paddy (Rice)</div>
+        <p class="crop-reason" id="cropReason">Synthesizing location weather profile with selected alluvial soil and Kharif season parameters...</p>
+        <div class="crop-metrics">
+          <div class="metric"><small>EXPECTED YIELD</small><strong id="yield">42 q / acre</strong></div>
+          <div class="metric"><small>GROWING PERIOD</small><strong id="period">110–130 days</strong></div>
+          <div class="metric"><small>WATER REQUIREMENT</small><strong id="water">High (Monsoon-fed)</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="compare">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-kicker">Side-by-Side Planning</div>
+        <h2>Compare two crops.</h2>
+      </div>
+      <p class="section-intro">Compare season fit, water, yield, budget, maintenance allocation, and estimated returns for the same land area.</p>
+    </div>
+
+    <div class="compare-selectors">
+      <div class="field">
+        <label for="compareCropA">FIRST CROP</label>
+        <select id="compareCropA"></select>
+      </div>
+      <div class="field">
+        <label for="compareCropB">SECOND CROP</label>
+        <select id="compareCropB"></select>
+      </div>
+    </div>
+
+    <div class="comparison-table-wrap">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th scope="col">Aspect</th>
+            <th scope="col" id="compareHeadingA">Crop A</th>
+            <th scope="col" id="compareHeadingB">Crop B</th>
+          </tr>
+        </thead>
+        <tbody id="comparisonRows"></tbody>
+      </table>
+    </div>
+    <p class="comparison-note" id="comparisonNote">Uses the selected land area and investment budget. Yields and prices are app benchmarks; expense and maintenance allocations are estimates, not live quotes.</p>
+  </div>
+</section>
+
+<section class="section" id="profit">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-kicker">Economic Breakdown</div>
+        <h2>Investment, Expenses & Profit Margin.</h2>
+      </div>
+      <p class="section-intro">Input your absolute budget pool. The algorithm splits capital across line-items, checks baseline market price indexes, and highlights profit margins.</p>
+    </div>
+
+    <div class="profit-grid">
+      <div class="investment">
+        <div>
+          <h3>Capital Investment Pool</h3>
+          <p>Specify overall capital. Expenses distribute automatically based on agro-economic ratios.</p>
+        </div>
+        <div class="money-input">
+          <label for="investment">TOTAL INVESTMENT (₹)</label>
+          <input id="investment" type="number" value="50000" min="1000" step="500">
+        </div>
+      </div>
+
+      <div class="profit-card">
+        <div class="result-header">
+          <h3>Expense Breakdown & Returns</h3>
+          <span class="crop-pill" id="selectedCrop">Paddy · 2 acres</span>
+        </div>
+        <div class="expenses">
+          <div class="expense-row"><span>Seeds & Propagation</span><strong id="seedCost">₹5,000</strong></div>
+          <div class="expense-row"><span>Fertilizers & Nutrients</span><strong id="fertCost">₹9,000</strong></div>
+          <div class="expense-row"><span>Labour & Tillage</span><strong id="labourCost">₹15,000</strong></div>
+          <div class="expense-row"><span>Irrigation & Power</span><strong id="waterCost">₹6,000</strong></div>
+          <div class="expense-row"><span>Crop Protection / Pesticides</span><strong id="protectCost">₹4,000</strong></div>
+          <div class="expense-row"><span>Logistics & Miscellaneous</span><strong id="otherCost">₹3,000</strong></div>
+          <div class="expense-row total"><span>Total Estimated Expense</span><strong id="totalCost">₹42,000</strong></div>
+        </div>
+        <div class="summary-grid">
+          <div class="summary"><small>CURRENT MARKET BENCHMARK</small><strong id="marketPrice">₹2,300 / q</strong></div>
+          <div class="summary"><small>EXPECTED GROSS REVENUE</small><strong id="revenue">₹1,93,200</strong></div>
+          <div class="summary highlight"><small>NET PROFIT MARGIN</small><strong id="profitValue">₹1,51,200</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div><strong>🌱 Krishi Bandhu</strong><p>Smart Open-Source AI Agriculture Assistant.</p></div>
+    <p>Powered by Open-Meteo Geocoding & Weather APIs · Zero Subscription Required</p>
+  </div>
+</footer>
+
+<script>
+const money = n => "₹" + Math.round(n).toLocaleString("en-IN");
+
+// Theme Switcher Logic
+const themeToggle = document.getElementById("themeToggle");
+const currentTheme = localStorage.getItem("krishi_theme") || "light";
+
+if (currentTheme === "dark") {
+  document.documentElement.setAttribute("data-theme", "dark");
+  themeToggle.textContent = "☀️";
+}
+
+themeToggle.addEventListener("click", () => {
+  let theme = document.documentElement.getAttribute("data-theme");
+  if (theme === "dark") {
+    document.documentElement.removeAttribute("data-theme");
+    localStorage.setItem("krishi_theme", "light");
+    themeToggle.textContent = "🌙";
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+    localStorage.setItem("krishi_theme", "dark");
+    themeToggle.textContent = "☀️";
+  }
+});
+
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
+
+function setNavigationOpen(isOpen) {
+  navLinks.classList.toggle("is-open", isOpen);
+  menuToggle.setAttribute("aria-expanded", String(isOpen));
+  menuToggle.setAttribute("aria-label", isOpen ? "Close navigation menu" : "Open navigation menu");
+  menuToggle.textContent = isOpen ? "×" : "☰";
+}
+
+menuToggle.addEventListener("click", () => {
+  setNavigationOpen(menuToggle.getAttribute("aria-expanded") !== "true");
+});
+
+navLinks.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => setNavigationOpen(false));
+});
+
+document.addEventListener("click", event => {
+  if (!navLinks.contains(event.target) && !menuToggle.contains(event.target)) {
+    setNavigationOpen(false);
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") setNavigationOpen(false);
+});
+
+// Crop and Market Benchmarks
+const cropDatabase = {
+  "Paddy": { yieldPerAcre: 42, period: "110–130 days", water: "High", price: 2300, desc: "Thrives in heavy moisture and alluvial or clay soils." },
+  "Wheat": { yieldPerAcre: 36, period: "120–140 days", water: "Medium", price: 2275, desc: "Ideal for cooler winter (Rabi) timelines." },
+  "Maize": { yieldPerAcre: 35, period: "90–110 days", water: "Medium", price: 2090, desc: "Versatile crop adaptable across various soils." },
+  "Mustard": { yieldPerAcre: 18, period: "100–120 days", water: "Low", price: 5450, desc: "Great oilseed option requiring minimal water." },
+  "Cotton": { yieldPerAcre: 12, period: "150–180 days", water: "Medium-High", price: 6600, desc: "Suits deep black or alluvial soils." },
+  "Watermelon": { yieldPerAcre: 75, period: "80–100 days", water: "Medium", price: 1800, desc: "Best suited for sandy soils during warm Zaid windows." }
+};
+
+let activeCropData = cropDatabase["Paddy"];
+let activeCropName = "Paddy";
+
+// Free Open-Meteo weather lookup with browser geolocation and city search.
+let weatherRequestId = 0;
+
+function describeWeather(code) {
+  if (code === 0) return { text: "Clear sky", icon: "☀️" };
+  if (code <= 3) return { text: "Partly cloudy", icon: "⛅" };
+  if (code === 45 || code === 48) return { text: "Fog", icon: "🌫️" };
+  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return { text: "Rain", icon: "🌧️" };
+  if ((code >= 71 && code <= 77) || code === 85 || code === 86) return { text: "Snow", icon: "❄️" };
+  if (code >= 95) return { text: "Thunderstorm", icon: "⛈️" };
+  return { text: "Variable conditions", icon: "🌤️" };
+}
+
+function renderFiveDayForecast(daily) {
+  const container = document.getElementById("forecastContainer");
+  container.replaceChildren();
+
+  for (let index = 0; index < 5; index += 1) {
+    if (!daily.time[index]) continue;
+    const date = new Date(`${daily.time[index]}T12:00:00`);
+    const label = index === 0
+      ? "Today"
+      : new Intl.DateTimeFormat(undefined, { weekday: "short" }).format(date);
+    const conditions = describeWeather(daily.weather_code[index]);
+    const day = document.createElement("div");
+    const icon = document.createElement("span");
+    const high = document.createElement("b");
+    const low = document.createElement("small");
+
+    day.append(document.createTextNode(label));
+    icon.className = "forecast-icon";
+    icon.textContent = conditions.icon;
+    icon.setAttribute("aria-label", conditions.text);
+    high.textContent = `${Math.round(daily.temperature_2m_max[index])}°`;
+    low.textContent = `Low ${Math.round(daily.temperature_2m_min[index])}°`;
+    day.append(icon, high, low);
+    container.appendChild(day);
+  }
+}
+
+async function fetchWeatherAt(latitude, longitude, placeLabel, requestId) {
+  const weatherUrl = new URL("https://api.open-meteo.com/v1/forecast");
+  weatherUrl.search = new URLSearchParams({
+    latitude,
+    longitude,
+    current: "temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code",
+    daily: "temperature_2m_max,temperature_2m_min,weather_code",
+    forecast_days: "5",
+    timezone: "auto"
+  });
+
+  const weatherRes = await fetch(weatherUrl);
+  if (!weatherRes.ok) throw new Error("Weather service is unavailable.");
+  const weatherData = await weatherRes.json();
+  if (requestId !== weatherRequestId) return false;
+  if (!weatherData.current || !weatherData.daily) throw new Error("Weather data is incomplete.");
+
+  const currentConditions = describeWeather(weatherData.current.weather_code);
+  document.getElementById("weatherLocLabel").textContent = `📍 ${placeLabel}`;
+  document.getElementById("tempVal").textContent = `${Math.round(weatherData.current.temperature_2m)}°C`;
+  document.getElementById("humidityVal").textContent = `${weatherData.current.relative_humidity_2m}%`;
+  document.getElementById("windVal").textContent = `${Math.round(weatherData.current.wind_speed_10m)} km/h`;
+  document.getElementById("conditionVal").textContent = currentConditions.text;
+  document.getElementById("weatherIcon").textContent = currentConditions.icon;
+  document.getElementById("weatherStatus").textContent = "● Live weather · 5-day forecast";
+  renderFiveDayForecast(weatherData.daily);
+  return true;
+}
+
+async function fetchLiveWeather(cityName = "Durgapur") {
+  const requestId = ++weatherRequestId;
+  document.getElementById("weatherStatus").textContent = `● Finding weather for ${cityName}...`;
+  try {
+    const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1`);
+    if (!geoRes.ok) throw new Error("Location search is unavailable.");
+    const geoData = await geoRes.json();
+    if (!geoData.results || geoData.results.length === 0) {
+      if (requestId === weatherRequestId) document.getElementById("weatherStatus").textContent = "● Location not found";
+      return false;
+    }
+    
+    const { latitude, longitude, name, admin1, country } = geoData.results[0];
+    return await fetchWeatherAt(latitude, longitude, `${name}, ${admin1 || country}`, requestId);
+  } catch (err) {
+    console.warn("City weather lookup failed.", err);
+    if (requestId === weatherRequestId) document.getElementById("weatherStatus").textContent = "● Weather unavailable";
+    return false;
+  }
+}
+
+async function fetchCurrentLocationWeather() {
+  const requestId = ++weatherRequestId;
+  if (!navigator.geolocation) return fetchLiveWeather("Durgapur");
+
+  document.getElementById("weatherStatus").textContent = "● Requesting current location...";
+  try {
+    const position = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: false,
+        maximumAge: 300000,
+        timeout: 10000
+      });
+    });
+    if (requestId !== weatherRequestId) return false;
+
+    const { latitude, longitude } = position.coords;
+    let placeLabel = `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
+    try {
+      const reverseUrl = new URL("https://api.bigdatacloud.net/data/reverse-geocode-client");
+      reverseUrl.search = new URLSearchParams({ latitude, longitude, localityLanguage: "en" });
+      const reverseResponse = await fetch(reverseUrl);
+      if (!reverseResponse.ok) throw new Error("Reverse geocoding is unavailable.");
+      const reverseData = await reverseResponse.json();
+      if (requestId !== weatherRequestId) return false;
+      const placeName = reverseData.locality || reverseData.city;
+      if (placeName) {
+        placeLabel = `${placeName}, ${reverseData.principalSubdivision || reverseData.countryName || ""}`.replace(/, $/, "");
+        document.getElementById("locationInput").value = placeName;
+      }
+    } catch (error) {
+      console.warn("Reverse geocoding failed; showing coordinates.", error);
+    }
+
+    return await fetchWeatherAt(latitude, longitude, placeLabel, requestId);
+  } catch (error) {
+    console.info("Current location unavailable; using Durgapur instead.", error);
+    if (requestId !== weatherRequestId) return false;
+    document.getElementById("weatherStatus").textContent = "● Location unavailable · using Durgapur";
+    return await fetchLiveWeather("Durgapur");
+  }
+}
+
+// Profit Calculator Logic
+function updateProfit() {
+  const investment = Math.max(1000, Number(document.getElementById("investment").value) || 50000);
+  const split = { seed: 0.12, fert: 0.21, labour: 0.36, water: 0.14, protect: 0.095, other: 0.075 };
+  const ids = ["seedCost", "fertCost", "labourCost", "waterCost", "protectCost", "otherCost"];
+  const vals = Object.values(split).map(x => investment * x);
+  
+  ids.forEach((id, i) => { document.getElementById(id).textContent = money(vals[i]); });
+  
+  const totalExpense = vals.reduce((a, b) => a + b, 0);
+  document.getElementById("totalCost").textContent = money(totalExpense);
+
+  const acres = Math.max(0.1, Number(document.getElementById("land").value) || 2);
+  const grossRevenue = acres * activeCropData.yieldPerAcre * activeCropData.price;
+  const netProfit = grossRevenue - totalExpense;
+
+  document.getElementById("marketPrice").textContent = `₹${activeCropData.price.toLocaleString("en-IN")} / q`;
+  document.getElementById("revenue").textContent = money(grossRevenue);
+  document.getElementById("profitValue").textContent = money(netProfit);
+  document.getElementById("selectedCrop").textContent = `${activeCropName} · ${acres} acres`;
+}
+
+document.getElementById("investment").addEventListener("input", updateProfit);
+document.getElementById("land").addEventListener("input", updateProfit);
+
+const cropSeasons = {
+  "Paddy": ["Kharif"],
+  "Wheat": ["Rabi"],
+  "Maize": ["Zaid"],
+  "Mustard": ["Rabi"],
+  "Cotton": ["Kharif"],
+  "Watermelon": ["Zaid"]
+};
+
+function initializeCropComparison() {
+  const firstSelect = document.getElementById("compareCropA");
+  const secondSelect = document.getElementById("compareCropB");
+
+  for (const cropName of Object.keys(cropDatabase)) {
+    for (const select of [firstSelect, secondSelect]) {
+      const option = document.createElement("option");
+      option.value = cropName;
+      option.textContent = cropName;
+      select.appendChild(option);
+    }
+  }
+
+  firstSelect.value = "Paddy";
+  secondSelect.value = "Mustard";
+  firstSelect.addEventListener("change", renderCropComparison);
+  secondSelect.addEventListener("change", renderCropComparison);
+  document.getElementById("season").addEventListener("change", renderCropComparison);
+  document.getElementById("land").addEventListener("input", renderCropComparison);
+  document.getElementById("investment").addEventListener("input", renderCropComparison);
+  renderCropComparison();
+}
+
+function renderCropComparison() {
+  const cropAName = document.getElementById("compareCropA").value;
+  const cropBName = document.getElementById("compareCropB").value;
+  if (!cropAName || !cropBName) return;
+
+  const season = document.getElementById("season").value;
+  const acres = Math.max(0.1, Number(document.getElementById("land").value) || 2);
+  const investment = Math.max(1000, Number(document.getElementById("investment").value) || 50000);
+  const maintenance = investment * (0.21 + 0.36 + 0.14 + 0.095);
+  const crops = [cropAName, cropBName].map(name => ({
+    name,
+    data: name === activeCropName ? activeCropData : cropDatabase[name]
+  }));
+  const values = crops.map(({ name, data }) => ({
+    name,
+    season: `${cropSeasons[name].join(" / ")} ${cropSeasons[name].includes(season) ? "· suitable season" : "· outside selected season"}`,
+    land: `${acres.toLocaleString("en-IN")} acres`,
+    period: data.period,
+    water: data.water,
+    yield: `${data.yieldPerAcre.toFixed(1)} q / acre`,
+    market: `₹${data.price.toLocaleString("en-IN")} / q`,
+    cost: money(investment),
+    maintenance: money(maintenance),
+    revenue: money(acres * data.yieldPerAcre * data.price),
+    profit: money(acres * data.yieldPerAcre * data.price - investment)
+  }));
+
+  document.getElementById("compareHeadingA").textContent = values[0].name;
+  document.getElementById("compareHeadingB").textContent = values[1].name;
+  const aspects = [
+    ["Season fit", "season"],
+    ["Land area", "land"],
+    ["Growing period", "period"],
+    ["Water requirement", "water"],
+    ["Expected yield", "yield"],
+    ["Market benchmark", "market"],
+    ["Estimated total cost", "cost"],
+    ["Maintenance allocation", "maintenance"],
+    ["Estimated gross revenue", "revenue"],
+    ["Estimated net profit", "profit"]
+  ];
+  const rows = document.getElementById("comparisonRows");
+  rows.replaceChildren();
+
+  for (const [label, key] of aspects) {
+    const row = document.createElement("tr");
+    if (key === "profit") row.className = "profit-row";
+    const heading = document.createElement("th");
+    heading.scope = "row";
+    heading.textContent = label;
+    row.appendChild(heading);
+    for (const crop of values) {
+      const cell = document.createElement("td");
+      cell.textContent = crop[key];
+      row.appendChild(cell);
+    }
+    rows.appendChild(row);
+  }
+}
+
+function displayCropRecommendation(cropName, cropData, reason, status) {
+  activeCropName = cropName;
+  activeCropData = cropData;
+  document.getElementById("cropName").textContent = cropName;
+  document.getElementById("yield").textContent = `${cropData.yieldPerAcre.toFixed(1)} q / acre`;
+  document.getElementById("period").textContent = cropData.period;
+  document.getElementById("water").textContent = cropData.water;
+  document.getElementById("cropReason").textContent = reason;
+  document.getElementById("modelStatusBadge").textContent = status;
+  updateProfit();
+  renderCropComparison();
+}
+
+async function checkBackendStatus() {
+  const badge = document.getElementById("modelStatusBadge");
+  try {
+    const response = await fetch("/api/health");
+    if (!response.ok) throw new Error("Backend health check failed.");
+    const health = await response.json();
+    badge.textContent = health.model_loaded
+      ? "PYTHON BACKEND · MODEL READY"
+      : "BACKEND ONLINE · TRAINING DATA REQUIRED";
+  } catch (error) {
+    badge.textContent = "BACKEND OFFLINE · LOCAL DEMO AVAILABLE";
+  }
+}
+
+// Crop Engine Form Handling
+document.getElementById("cropForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const season = document.getElementById("season").value;
+  const soil = document.getElementById("soil").value;
+  const location = document.getElementById("locationInput").value.trim() || "Durgapur";
+  const submitButton = e.submitter || document.querySelector('#cropForm button[type="submit"]');
+  submitButton.disabled = true;
+
+  try {
+    await fetchLiveWeather(location);
+    const payload = {
+      season,
+      soil_type: soil,
+      temperature_c: Number.parseFloat(document.getElementById("tempVal").textContent) || null,
+      humidity_pct: Number.parseFloat(document.getElementById("humidityVal").textContent) || null
+    };
+    const response = await fetch("/api/recommend", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || "Backend recommendation failed.");
+    }
+
+    const result = await response.json();
+    const [top, ...alternatives] = result.recommendations;
+    const base = cropDatabase[top.crop] || {
+      yieldPerAcre: top.estimated_yield_quintals_per_acre,
+      period: "Not available",
+      water: "Check local guidance",
+      price: top.median_price_rupees_per_quintal || 0,
+      desc: ""
+    };
+    displayCropRecommendation(
+      top.crop,
+      {
+        ...base,
+        yieldPerAcre: top.estimated_yield_quintals_per_acre,
+        price: top.median_price_rupees_per_quintal || base.price
+      },
+      `Python model recommendation for ${location} (${season}, ${soil}). Alternatives: ${alternatives.map(item => `${item.crop} (${Math.round(item.ensemble_score * 100)}% model score)`).join(" · ")}. Estimates are based on the model's observed training data, not guaranteed outcomes.`,
+      `PYTHON MODEL · ${Math.round(top.bayes_posterior * 100)}% BAYES POSTERIOR`
+    );
+  } catch (error) {
+    console.warn("Python recommendation unavailable; using labeled local demo model.", error);
+    try {
+      const { recommendFarmCrops } = await import("./farm-decision-model.js");
+      const temperature = Number.parseFloat(document.getElementById("tempVal").textContent);
+      const ranking = recommendFarmCrops({ season, soil, temperature }, cropDatabase);
+      const top = ranking.recommendation;
+      displayCropRecommendation(
+        top.cropName,
+        { ...cropDatabase[top.cropName], yieldPerAcre: top.estimatedYield },
+        `Local demo ranking for ${location} (${season}, ${soil}). ${top.evidence} Alternatives: ${ranking.alternatives.map(item => `${item.cropName} (${Math.round(item.score * 100)}%)`).join(" · ")}. ${ranking.dataNote}`,
+        "LOCAL DEMO · PYTHON MODEL NEEDS DATA"
+      );
+    } catch (fallbackError) {
+      console.error("No recommendation model is available:", fallbackError);
+      document.getElementById("modelStatusBadge").textContent = "RECOMMENDATION MODEL UNAVAILABLE";
+      document.getElementById("cropReason").textContent = "The backend is not trained and the local demo could not load.";
+    }
+  } finally {
+    submitButton.disabled = false;
+  }
+});
+
+// Initial load triggers
+initializeCropComparison();
+fetchCurrentLocationWeather();
+updateProfit();
+checkBackendStatus();
+
+import("./ai-chat.js").then(({ initializeAiChat }) => {
+  initializeAiChat({
+    money,
+    getFarmContext: () => ({
+      location: document.getElementById("locationInput").value.trim() || "Durgapur",
+      season: document.getElementById("season").value,
+      soil: document.getElementById("soil").value,
+      land: Number(document.getElementById("land").value) || 2,
+      cropName: activeCropName,
+      crop: activeCropData,
+      temperature: document.getElementById("tempVal").textContent,
+      humidity: document.getElementById("humidityVal").textContent,
+      investment: money(Number(document.getElementById("investment").value) || 50000),
+      expenses: document.getElementById("totalCost").textContent,
+      revenue: document.getElementById("revenue").textContent,
+      profit: document.getElementById("profitValue").textContent
+    })
+  });
+}).catch(error => {
+  console.error("AI chat module failed to load:", error);
+  document.getElementById("chatStatus").textContent = "AI chat module could not start. Open this page through a local web server.";
+});
+</script>
+</body>
+</html>
