@@ -243,6 +243,18 @@ button{cursor:pointer}
 [data-theme="dark"] .comparison-table .profit-row td{color:var(--green-500)}
 .comparison-note{color:var(--muted);font-size:.8rem;margin-top:12px}
 
+/* ORGANIC FARMING AND FARMER RESOURCES */
+.organic-guide-grid,.resource-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px}
+.organic-topic{border-top:1px solid var(--card-border);padding:18px 0}
+.organic-topic h3{font-size:1rem;margin-bottom:8px;color:var(--text-color)}
+.organic-topic p{color:var(--muted);font-size:.88rem}
+.organic-callout{margin-top:22px;padding:18px 20px;border-left:4px solid var(--green-500);background:var(--metric-bg);color:var(--text-color);font-size:.88rem}
+.resource-link{display:grid;gap:5px;align-content:start;padding:17px 0;border-top:1px solid var(--card-border);color:var(--text-color);text-decoration:none}
+.resource-link strong{font-size:.95rem}
+.resource-link span{color:var(--muted);font-size:.82rem}
+.resource-link:hover strong{color:var(--green-700)}
+[data-theme="dark"] .resource-link:hover strong{color:var(--green-500)}
+
 /* FOOTER */
 .footer{background:var(--green-950);color:white;padding:42px 0}
 .footer-inner{display:flex;justify-content:space-between;gap:25px;align-items:center}
@@ -255,6 +267,7 @@ button{cursor:pointer}
   .nav-links.is-open a{padding:13px 14px;border-radius:9px}
   .menu{display:grid}
   .hero-grid,.query-wrap,.crop-grid,.profit-grid{grid-template-columns:1fr}
+  .organic-guide-grid,.resource-links{grid-template-columns:1fr}
   .forecast{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media(max-width:550px){
@@ -274,6 +287,8 @@ button{cursor:pointer}
       <a href="#assistant">AI Chat Model</a>
       <a href="#crops">Smart Crop Engine</a>
       <a href="#compare">Compare Crops</a>
+      <a href="#organic">Learn Organic Farming</a>
+      <a href="#resources">Know More</a>
       <a href="#profit" class="nav-cta">Profit & Cost Calculator</a>
     </div>
     <div style="display: flex; align-items: center; gap: 10px;">
@@ -509,6 +524,111 @@ button{cursor:pointer}
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="section crop-section" id="organic">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-kicker">Verified Learning Guide</div>
+        <h2>Learn organic farming.</h2>
+      </div>
+      <p class="section-intro">A practical starting plan based on guidance from India's National Centre for Organic and Natural Farming, APEDA, and the Ministry of Agriculture.</p>
+    </div>
+
+    <div class="organic-guide-grid">
+      <article class="organic-topic">
+        <h3>1. Understand the system</h3>
+        <p>Organic farming is a whole-farm approach to soil fertility, crop diversity, and pest prevention. It is not simply stopping synthetic inputs overnight. Follow the standard that applies to your market, and do not use an organic label until its requirements are met. Organic and natural farming have related but distinct guidance and certification routes.</p>
+      </article>
+      <article class="organic-topic">
+        <h3>2. Start with your soil and field history</h3>
+        <p>Get a soil test, map each plot, and record previous crops and inputs. Build a rotation that includes locally suitable legumes or green manures, recycle healthy crop residues, and use well-prepared compost where appropriate. Protect soil from erosion and avoid waterlogging. Base nutrient decisions on the test and local recommendations, not a generic online recipe.</p>
+      </article>
+      <article class="organic-topic">
+        <h3>3. Plan seed, rotation, and contamination control</h3>
+        <p>Choose varieties suited to your district and market; use organic seed when available and required by your chosen standard. Rotate crops and diversify planting to interrupt pest cycles. Where neighboring farms use prohibited substances, ask your certification group or agency about buffers and drift prevention before converting a plot.</p>
+      </article>
+      <article class="organic-topic">
+        <h3>4. Prevent pests and weeds first</h3>
+        <p>Use crop rotation, timely planting, resistant varieties, field sanitation, mulches, mechanical weeding, and regular scouting. Encourage beneficial organisms where practical. Use only inputs permitted by the applicable organic standard and registered for the crop and purpose. Never assume a homemade preparation or biological input is automatically approved or safe.</p>
+      </article>
+      <article class="organic-topic">
+        <h3>5. Keep records and protect harvest quality</h3>
+        <p>Keep field maps, seed sources, input names and dates, compost records, harvest quantities, storage lots, and sales receipts. Store and transport organic produce separately from non-organic produce to preserve identity. These records help with farm decisions, traceability, group certification, and buyer requirements.</p>
+      </article>
+      <article class="organic-topic">
+        <h3>6. Check certification and economics early</h3>
+        <p>Ask NCONF, your state agriculture department, or a recognized group/certification body which route fits your farm. APEDA administers NPOP for applicable certification, including export-oriented supply chains; PGS-India is a separate participatory route. Conversion periods, inspections, and label rules depend on the standard. Compare costs and buyers before converting large areas; yield changes and price premiums are not guaranteed.</p>
+      </article>
+    </div>
+
+    <p class="organic-callout"><strong>Before changing inputs:</strong> make a plot-level plan with your local KVK. Check the official standards and scheme rules linked below. This guide is general education, not a certification decision, crop diagnosis, or fertilizer/pesticide prescription.</p>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="section-kicker">Official Farmer Support</div>
+        <h2>Know more.</h2>
+      </div>
+      <p class="section-intro">Verified government and agricultural-institution resources for organic standards, local advice, soil, weather, markets, insurance, and schemes.</p>
+    </div>
+
+    <div class="resource-links">
+      <a class="resource-link" href="https://nconf.dac.gov.in/uploads/books_manual/Field_Guide_for_Organic_grower.pdf" target="_blank" rel="noopener noreferrer">
+        <strong>NCONF Organic Grower Field Guide</strong>
+        <span>Government of India field guide for organic growers.</span>
+      </a>
+      <a class="resource-link" href="https://nconf.dac.gov.in/" target="_blank" rel="noopener noreferrer">
+        <strong>National Centre for Organic and Natural Farming</strong>
+        <span>Official training, organic/natural farming resources, and current guidance.</span>
+      </a>
+      <a class="resource-link" href="https://npop.apeda.gov.in/" target="_blank" rel="noopener noreferrer">
+        <strong>APEDA National Programme for Organic Production</strong>
+        <span>NPOP standards, accredited certification bodies, and organic export information.</span>
+      </a>
+      <a class="resource-link" href="https://agriwelfare.gov.in/Documents/Revised_PKVY_Guidelines_022-2023_PUB_1FEB2022.pdf" target="_blank" rel="noopener noreferrer">
+        <strong>Ministry of Agriculture PKVY Guidelines</strong>
+        <span>Official Paramparagat Krishi Vikas Yojana program guidelines; check the latest state implementation.</span>
+      </a>
+      <a class="resource-link" href="https://icar.org.in/en/krishi-vigyan-kendras" target="_blank" rel="noopener noreferrer">
+        <strong>Find a Krishi Vigyan Kendra</strong>
+        <span>ICAR directory of district-level farm science and extension centres.</span>
+      </a>
+      <a class="resource-link" href="https://www.manage.gov.in/kcc/kcc.asp" target="_blank" rel="noopener noreferrer">
+        <strong>Kisan Call Centre</strong>
+        <span>Farmer guidance by phone: 1800-180-1551. Check current hours and language support.</span>
+      </a>
+      <a class="resource-link" href="https://soilhealth.dac.gov.in/" target="_blank" rel="noopener noreferrer">
+        <strong>Soil Health Card and Soil Testing</strong>
+        <span>Department of Agriculture portal for soil testing, reports, and nearby laboratories.</span>
+      </a>
+      <a class="resource-link" href="https://mausam.imd.gov.in/responsive/agromet_adv_ser_state_current.php" target="_blank" rel="noopener noreferrer">
+        <strong>IMD Agromet Advisories</strong>
+        <span>India Meteorological Department weather-based state and district farm advisories.</span>
+      </a>
+      <a class="resource-link" href="https://enam.gov.in/web/" target="_blank" rel="noopener noreferrer">
+        <strong>e-NAM National Agriculture Market</strong>
+        <span>Official market platform, mandi information, and farmer learning resources.</span>
+      </a>
+      <a class="resource-link" href="https://pmfby.gov.in/" target="_blank" rel="noopener noreferrer">
+        <strong>Pradhan Mantri Fasal Bima Yojana</strong>
+        <span>Crop insurance enrollment, application status, guidelines, and grievance support.</span>
+      </a>
+      <a class="resource-link" href="https://pmkisan.gov.in/" target="_blank" rel="noopener noreferrer">
+        <strong>PM-KISAN</strong>
+        <span>Official scheme eligibility, beneficiary status, and farmer services.</span>
+      </a>
+      <a class="resource-link" href="https://agriwelfare.gov.in/" target="_blank" rel="noopener noreferrer">
+        <strong>Department of Agriculture & Farmers Welfare</strong>
+        <span>Government of India agriculture programs, notifications, and policy information.</span>
+      </a>
+    </div>
+    <p class="comparison-note">External links open official sites. Scheme eligibility, standards, and certification requirements can change; confirm details with the responsible department or your state KVK.</p>
   </div>
 </section>
 
