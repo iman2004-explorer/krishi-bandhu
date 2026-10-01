@@ -2,43 +2,43 @@ const FARM_GUIDES = [
   {
     category: "field-crops",
     title: "Rice and paddy planning",
-    terms: "rice paddy kharif nursery transplant direct sow water irrigation drainage weeds blast stem borer harvest",
+    terms: "rice paddy kharif nursery transplant direct sow water irrigation drainage weeds blast stem borer harvest dhan padder dhani",
     guidance: "Choose a locally released variety and planting window for the district. Paddy may be nursery-transplanted or direct-seeded depending on water, labor, and weed pressure. Keep fields level, manage water without prolonged unnecessary flooding where local practice allows, and monitor weeds and diseases such as blast. Confirm seed rate, spacing, nutrient schedule, and safe control measures with the local KVK."
   },
   {
     category: "field-crops",
     title: "Wheat season and irrigation",
-    terms: "wheat rabi sowing soil irrigation crown root initiation flowering rust weeds harvest grain",
+    terms: "wheat rabi sowing soil irrigation crown root initiation flowering rust weeds harvest grain goru gam godhum",
     guidance: "Wheat is generally a cool-season Rabi crop. Timely sowing into a prepared, well-drained field helps establishment. Irrigation is especially important around crown-root development and later reproductive growth; adjust timing to rainfall, soil, and local advisories. Scout for weeds and rust, and use a locally recommended variety and nutrient plan based on a soil test."
   },
   {
     category: "field-crops",
     title: "Maize crop care",
-    terms: "maize corn kharif zaid seed planting drainage irrigation nitrogen fall armyworm stemborer harvest",
+    terms: "maize corn kharif zaid seed planting drainage irrigation nitrogen fall armyworm stemborer harvest maiz makai",
     guidance: "Maize needs a well-drained seedbed and reliable moisture during establishment and flowering. Avoid waterlogging. Use locally adapted seed, rotate crops where possible, and scout young plants regularly for fall armyworm and stem-borer damage. Identify the pest before choosing a response; follow local integrated-pest-management guidance and pesticide labels."
   },
   {
     category: "field-crops",
     title: "Cotton integrated pest management",
-    terms: "cotton kharif black soil irrigation bollworm pink bollworm sucking pests scouting harvest",
+    terms: "cotton kharif black soil irrigation bollworm pink bollworm sucking pests scouting harvest kapor kapas",
     guidance: "Cotton performs best with a locally suitable variety, well-drained soil, and a season matched to the district. Scout fields regularly for sucking pests and bollworms, use crop rotation and field sanitation, and follow resistance-management advice. Do not rely on calendar spraying; confirm pest identification and any treatment with local extension staff."
   },
   {
     category: "fruits",
     title: "Mango orchard basics",
-    terms: "mango fruit orchard variety flowering pollination soil drainage irrigation pruning hopper anthracnose fruit fly harvest",
+    terms: "mango fruit orchard variety flowering pollination soil drainage irrigation pruning hopper anthracnose fruit fly harvest aam am",
     guidance: "For mango, select a variety suited to local climate and market, use healthy planting material, and provide a well-drained site with space for the mature canopy. Avoid waterlogging and maintain orchard sanitation. Monitor flowering and fruit set for hopper or disease symptoms, and collect fallen fruit to reduce fruit-fly pressure. Pruning and treatment timing vary by cultivar and region, so check the local horticulture package."
   },
   {
     category: "fruits",
     title: "Banana establishment and harvest",
-    terms: "banana fruit tissue culture planting drainage irrigation wind sucker pseudostem bunch harvest ripening",
+    terms: "banana fruit tissue culture planting drainage irrigation wind sucker pseudostem bunch harvest ripening kola",
     guidance: "Banana needs fertile, well-drained soil, steady moisture, and protection from strong wind. Start with healthy, true-to-type planting material; manage suckers and support heavy bunches as locally advised. Avoid standing water around roots and remove diseased plant parts using clean tools. Harvest maturity depends on cultivar and whether fruit is for nearby sale or transport."
   },
   {
     category: "fruits",
     title: "Guava orchard and fruit fly",
-    terms: "guava fruit orchard pruning irrigation drainage fruit fly wilt harvesting bagging sanitation",
+    terms: "guava fruit orchard pruning irrigation drainage fruit fly wilt harvesting bagging sanitation peyara",
     guidance: "Guava tolerates a range of conditions but benefits from a sunny site with drainage and a locally suited variety. Keep an orchard floor clean, prune for manageable airflow, and monitor wilt and fruit-fly damage. Remove and dispose of infested fallen fruit; any trapping or bagging method should follow local horticulture guidance. Avoid assuming the same pruning or harvest calendar fits every region."
   },
   {
@@ -50,43 +50,43 @@ const FARM_GUIDES = [
   {
     category: "flowers",
     title: "Marigold production",
-    terms: "marigold flower nursery transplant pinching drainage irrigation flower harvest garland pests",
+    terms: "marigold flower ful fuler phul phuler phool phooler cultivation production floriculture nursery transplant pinching drainage irrigation harvest garland pests",
     guidance: "Marigold can be raised from healthy seed or nursery seedlings, with planting dates selected for the local flowering and market season. Use a sunny, well-drained bed, avoid excess water around roots, and remove weeds early. Pinching may encourage branching in suitable types. Harvest fully developed flowers at the stage preferred by the buyer, and keep them shaded after picking."
   },
   {
     category: "flowers",
     title: "Rose care and cut flowers",
-    terms: "rose flower garden cut flower pruning drainage irrigation black spot mildew aphids harvest",
+    terms: "rose flower ful fuler phul phuler phool phooler cultivation production floriculture garden cut flower pruning drainage irrigation black spot mildew aphids harvest",
     guidance: "Roses need a locally adapted variety, sunlight, drainage, and airflow through the canopy. Pruning timing depends on climate and rose type. Water near the root zone where possible and avoid keeping foliage wet for long periods. Monitor black spot, powdery mildew, and aphids; identify the problem before treatment. Cut-flower stage and post-harvest handling depend on the market and cultivar."
   },
   {
     category: "flowers",
     title: "Chrysanthemum season planning",
-    terms: "chrysanthemum flower photoperiod short day nursery pinching staking drainage rust harvest",
+    terms: "chrysanthemum flower ful fuler phul phuler phool phooler cultivation production floriculture photoperiod short day nursery pinching staking drainage rust harvest",
     guidance: "Chrysanthemum flowering responds to variety and day length, so select planting material and schedules for the local season and target market date. Provide drainage, even moisture, and support for tall stems. Pinching is used in some production systems to shape plants, but timing varies by cultivar. Watch for leaf-spot or rust symptoms and confirm diagnosis locally."
   },
   {
     category: "flowers",
     title: "Jasmine flower harvest",
-    terms: "jasmine flower buds fragrance pruning irrigation drainage harvest morning garland",
+    terms: "jasmine flower ful fuler phul phuler phool phooler cultivation production floriculture buds fragrance pruning irrigation drainage harvest morning garland jui chameli",
     guidance: "Jasmine production depends strongly on species, variety, and local climate. Use healthy planting material, maintain a drained root zone, and prune according to the regional flowering cycle. Pick buds at the stage requested by the local buyer, handle gently, and keep harvested flowers cool and shaded. Ask local horticulture extension staff about cultivar-specific pruning and nutrient schedules."
   },
   {
     category: "spices",
     title: "Turmeric planting and rhizomes",
-    terms: "turmeric spice rhizome seed planting monsoon shade drainage irrigation rhizome rot harvest curing",
+    terms: "turmeric spice rhizome seed planting monsoon shade drainage irrigation rhizome rot harvest curing haldi holud",
     guidance: "Turmeric is propagated from healthy rhizomes and generally needs warm, moist growing conditions with good drainage. Prepare healthy seed rhizomes and avoid fields with a history of rhizome rot where possible. Mulching and water management are common practices, but planting dates and nutrient schedules vary by state and variety. Harvest and curing should follow the local buyer or processing standard."
   },
   {
     category: "spices",
     title: "Ginger drainage and disease",
-    terms: "ginger spice rhizome seed shade drainage irrigation rhizome rot bacterial wilt harvest",
+    terms: "ginger spice rhizome seed shade drainage irrigation rhizome rot bacterial wilt harvest ada adaa",
     guidance: "Ginger prefers warm, humid conditions and loose, well-drained soil; waterlogging can increase rhizome-rot risk. Use healthy planting rhizomes, rotate away from diseased plots, and avoid moving contaminated soil or planting material. Inspect weak or yellowing plants and obtain a diagnosis before treating. Harvest timing depends on whether ginger is sold fresh or mature."
   },
   {
     category: "spices",
     title: "Chilli crop management",
-    terms: "chilli chili spice nursery transplant irrigation thrips mites fruit borer anthracnose harvest drying",
+    terms: "chilli chili spice nursery transplant irrigation thrips mites fruit borer anthracnose harvest drying morich lanka",
     guidance: "Chilli needs healthy seedlings, a well-drained field, and moisture without prolonged waterlogging. Scout leaves and flowers for thrips, mites, and borer damage; also watch for fruit rot. Remove affected material where appropriate and use integrated pest management. Do not apply a pesticide based only on a chatbot description; confirm the pest and follow the registered product label and local extension guidance."
   },
   {
@@ -98,7 +98,7 @@ const FARM_GUIDES = [
   {
     category: "general",
     title: "Soil tests and nutrient planning",
-    terms: "soil test nutrients nitrogen phosphorus potassium ph fertilizer organic matter sample",
+    terms: "soil test nutrients nitrogen phosphorus potassium ph fertilizer organic matter sample mati matir",
     guidance: "Base fertilizer decisions on a representative soil test, crop, expected yield, and local recommendations. A soil test can guide pH and nutrient management; do not infer a fertilizer dose from crop name alone. Keep records of inputs and results. Ask a soil-testing laboratory or KVK how to sample the field and interpret the report."
   },
   {
